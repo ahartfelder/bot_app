@@ -25,6 +25,8 @@ class ArticlesController < ApplicationController
 
     respond_to do |format|
       if @article.save
+        text = "Article Created\nTitle: #{params[:article][:title]}\nContent: #{params[:article][:content]}"
+        BotMailer.send_message(text).deliver_later
         format.html { redirect_to article_url(@article), notice: "Article was successfully created." }
         format.json { render :show, status: :created, location: @article }
       else
@@ -38,6 +40,8 @@ class ArticlesController < ApplicationController
   def update
     respond_to do |format|
       if @article.update(article_params)
+        text = "Article Updated\nTitle: #{params[:article][:title]}\nContent: #{params[:article][:content]}"
+        BotMailer.send_message(text).deliver_later
         format.html { redirect_to article_url(@article), notice: "Article was successfully updated." }
         format.json { render :show, status: :ok, location: @article }
       else
@@ -50,6 +54,8 @@ class ArticlesController < ApplicationController
   # DELETE /articles/1 or /articles/1.json
   def destroy
     @article.destroy
+    text = "Article id:#{@article.id} Deleted"
+    BotMailer.send_message(text).deliver_later
 
     respond_to do |format|
       format.html { redirect_to articles_url, notice: "Article was successfully destroyed." }
@@ -66,5 +72,9 @@ class ArticlesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def article_params
       params.require(:article).permit(:title, :content)
+    end
+
+    def text
+      
     end
 end
