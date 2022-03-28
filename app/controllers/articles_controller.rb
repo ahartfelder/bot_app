@@ -27,7 +27,7 @@ class ArticlesController < ApplicationController
     respond_to do |format|
       if @article.save
         text = "Article Created\nTitle: #{params[:article][:title]}\nContent: #{params[:article][:content]}"
-        BotMailer.send_message(text).deliver_later
+        BotMailer.send_message(text, session[:user_id]).deliver_later
         format.html { redirect_to article_url(@article), notice: "Article was successfully created." }
         format.json { render :show, status: :created, location: @article }
       else
@@ -42,7 +42,7 @@ class ArticlesController < ApplicationController
     respond_to do |format|
       if @article.update(article_params)
         text = "Article Updated\nTitle: #{params[:article][:title]}\nContent: #{params[:article][:content]}"
-        BotMailer.send_message(text).deliver_later
+        BotMailer.send_message(text, session[:user_id]).deliver_later
         format.html { redirect_to article_url(@article), notice: "Article was successfully updated." }
         format.json { render :show, status: :ok, location: @article }
       else
@@ -56,7 +56,7 @@ class ArticlesController < ApplicationController
   def destroy
     @article.destroy
     text = "Article id:#{@article.id} Deleted"
-    BotMailer.send_message(text).deliver_later
+    BotMailer.send_message(text, session[:user_id]).deliver_later
 
     respond_to do |format|
       format.html { redirect_to articles_url, notice: "Article was successfully destroyed." }
