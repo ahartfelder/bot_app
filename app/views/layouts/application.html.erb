@@ -16,7 +16,6 @@
     <% else %>
       <%= session[:username] %>
       <%= button_to 'Logout', logout_path, method: :delete %>
-      <%= current_user.id if current_user %>
     <% end %>
     <hr>
     <%= yield %>
